@@ -73,5 +73,6 @@ export const dfsXyConv = (code, v1, v2) => {
     rs["lat"] = alat * RADDEG;
     rs["lng"] = alon * RADDEG;
   }
+  console.log(rs);
   return rs;
 };

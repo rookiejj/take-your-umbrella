@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const TakeYourUmbrella = () => {
+const TakeYourUmbrella = ({ rs }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,22 +27,22 @@ const TakeYourUmbrella = () => {
     "&" +
     encodeURIComponent("base_date") +
     "=" +
-    encodeURIComponent("20240710"); /**/
+    encodeURIComponent("20240711"); /**/
   queryParams +=
     "&" +
     encodeURIComponent("base_time") +
     "=" +
-    encodeURIComponent("2000"); /**/
+    encodeURIComponent("0030"); /**/
   queryParams +=
-    "&" + encodeURIComponent("nx") + "=" + encodeURIComponent("55"); /**/
+    "&" + encodeURIComponent("nx") + "=" + encodeURIComponent(`${rs.x}`); /**/
   queryParams +=
-    "&" + encodeURIComponent("ny") + "=" + encodeURIComponent("127"); /**/
+    "&" + encodeURIComponent("ny") + "=" + encodeURIComponent(`${rs.y}`); /**/
 
   // GET 요청 예제
   useEffect(() => {
     fetch(
       import.meta.env.VITE_END_POINT_URL +
-        import.meta.env.VITE_ULTRA_SRT_NCST +
+        import.meta.env.VITE_ULTRA_SRT_FCST +
         queryParams
     )
       .then((response) => {
@@ -62,29 +62,29 @@ const TakeYourUmbrella = () => {
   }, []);
 
   // POST 요청 예제
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    fetch("https://jsonplaceholder.typicode.com/posts", {
-      method: "POST",
-      body: JSON.stringify({
-        title: postData,
-        body: postData,
-        userId: 1,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        console.log("POST 응답:", json);
-        alert("데이터가 성공적으로 전송되었습니다!");
-      })
-      .catch((error) => {
-        console.error("에러:", error);
-        alert("데이터 전송 중 오류가 발생했습니다.");
-      });
-  };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   fetch("https://jsonplaceholder.typicode.com/posts", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       title: postData,
+  //       body: postData,
+  //       userId: 1,
+  //     }),
+  //     headers: {
+  //       "Content-type": "application/json; charset=UTF-8",
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       console.log("POST 응답:", json);
+  //       alert("데이터가 성공적으로 전송되었습니다!");
+  //     })
+  //     .catch((error) => {
+  //       console.error("에러:", error);
+  //       alert("데이터 전송 중 오류가 발생했습니다.");
+  //     });
+  // };
 
   if (loading) return <div>로딩중...</div>;
   if (error) return <div>에러: {error}</div>;
@@ -94,7 +94,7 @@ const TakeYourUmbrella = () => {
       <h2>GET 요청 결과:</h2>
       <pre>{JSON.stringify(data, null, 2)}</pre>
 
-      <h2>POST 요청 보내기:</h2>
+      {/* <h2>POST 요청 보내기:</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -103,7 +103,7 @@ const TakeYourUmbrella = () => {
           placeholder="전송할 데이터 입력"
         />
         <button type="submit">데이터 전송</button>
-      </form>
+      </form> */}
     </div>
   );
 };

@@ -16,9 +16,9 @@ function App() {
         <h1>우산 가져가!</h1>
         <FindLocation />
         {/* <button onClick={onClickButton}>Request API</button> */}
-        <section>
+        {/* <section>
           <TakeYourUmbrella />
-        </section>
+        </section> */}
         <section>
           <textarea />
         </section>

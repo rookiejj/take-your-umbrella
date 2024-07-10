@@ -1,56 +1,76 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { dfsXyConv } from "../util/dfs_xy_conv";
+import TakeYourUmbrella from "./TakeYourUmbrella";
 
 const FindLocation = () => {
-  var options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
-  function success(pos) {
-    var crd = pos.coords;
-    console.log("Your current position is:");
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
-    console.log(`More or less ${crd.accuracy} meters.`);
+  const [isLoading, setIsLoading] = useState(true);
+  const [location, setLocation] = useState(null);
+  const [rs, setRs] = useState({});
+  const [error, setError] = useState(null);
 
-    const rs = dfsXyConv("toXY", crd.latitude, crd.longitude);
+  let options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 };
 
-    console.log(rs["x"], rs["y"]);
-  }
-  function errors(err) {
+  const success = (position) => {
+    const { latitude, longitude } = position.coords;
+    setLocation({ latitude, longitude });
+    const convertedLocation = dfsXyConv("toXY", latitude, longitude);
+    setRs(convertedLocation);
+    setIsLoading(false);
+  };
+
+  const handleError = (err) => {
     console.warn(`ERROR(${err.code}): ${err.message}`);
-  }
+    setError(`위치 정보를 가져오는데 실패했습니다: ${err.message}`);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.permissions
-        .query({ name: "geolocation" })
-        .then(function (result) {
-          console.log(result);
-          if (result.state === "granted") {
-            //If granted then you can directly call your function here
-            navigator.geolocation.getCurrentPosition(success, errors, options);
-          } else if (result.state === "prompt") {
-            //If prompt then the user will be asked to give permission
-            navigator.geolocation.getCurrentPosition(success, errors, options);
-          } else if (result.state === "denied") {
-            //If denied then you have to show instructions to enable location
-          }
-        });
-    } else {
-      console.log("Geolocation is not supported by this browser.");
+    if (!navigator.geolocation) {
+      setError("Geolocation is not supported by this browser.");
+      setIsLoading(false);
+      return;
     }
+
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((result) => {
+        if (result.state === "granted" || result.state === "prompt") {
+          navigator.geolocation.getCurrentPosition(
+            success,
+            handleError,
+            options
+          );
+        } else if (result.state === "denied") {
+          setError(
+            "위치 정보 접근이 거부되었습니다. 설정에서 권한을 허용해주세요."
+          );
+          setIsLoading(false);
+        }
+      })
+      .catch(handleError);
   }, []);
 
   return (
-    <>
-      <div>
-        <section>
-          <h4>현재 위치</h4>
+    <div>
+      <section>
+        <h4>현재 위치</h4>
+        {isLoading && <p>위치 정보를 가져오는 중...</p>}
+        {error && <p style={{ color: "red" }}>{error}</p>}
+        {location && (
           <div>
-            <h4>경도 : </h4>
-            <h4>위도 : </h4>
+            <h4>경도: {location.latitude}</h4>
+            <h4>위도: {location.longitude}</h4>
+            <h4>변환된 X 좌표: {rs.x}</h4>
+            <h4>변환된 Y 좌표: {rs.y}</h4>
           </div>
+        )}
+      </section>
+      {!isLoading && !error && rs && (
+        <section>
+          <TakeYourUmbrella rs={rs} />
         </section>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 
