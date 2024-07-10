@@ -38,8 +38,6 @@ const TakeYourUmbrella = () => {
   queryParams +=
     "&" + encodeURIComponent("ny") + "=" + encodeURIComponent("127"); /**/
 
-  console.log(queryParams);
-
   // GET 요청 예제
   useEffect(() => {
     fetch(

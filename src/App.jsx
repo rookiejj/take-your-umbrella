@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import TakeYourUmbrella from "./components/TakeYourUmbrella";
+import FindLocation from "./components/FindLocation";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,13 +14,7 @@ function App() {
     <>
       <div>
         <h1>우산 가져가!</h1>
-        <section>
-          <h4>현재 위치</h4>
-          <div>
-            <h4>경도 : </h4>
-            <h4>위도 : </h4>
-          </div>
-        </section>
+        <FindLocation />
         {/* <button onClick={onClickButton}>Request API</button> */}
         <section>
           <TakeYourUmbrella />
