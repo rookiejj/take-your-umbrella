@@ -1,6 +1,8 @@
+import "./FindLocation.css";
 import { useEffect, useState } from "react";
 import { dfsXyConv } from "../util/dfs_xy_conv";
 import TakeYourUmbrella from "./TakeYourUmbrella";
+import { getStringedDate } from "../util/get-stringed-date";
 
 const FindLocation = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -50,25 +52,27 @@ const FindLocation = () => {
       .catch(handleError);
   }, []);
 
+  const baseDate = getStringedDate(new Date());
+
   return (
-    <div>
+    <div className="FindLocation">
       <section>
-        <h4>현재 위치</h4>
+        <h3>현재 위치</h3>
         {isLoading && <p>위치 정보를 가져오는 중...</p>}
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <p style={{ color: "yellow" }}>{error}</p>}
         {location && (
-          <div>
-            <h4>경도: {location.latitude}</h4>
-            <h4>위도: {location.longitude}</h4>
-            <h4>변환된 X 좌표: {rs.x}</h4>
-            <h4>변환된 Y 좌표: {rs.y}</h4>
+          <div className="location">
+            <div>
+              경도: {location.latitude} / 위도: {location.longitude}
+            </div>
+            <div>
+              변환된 X 좌표: {rs.x} / 변환된 Y 좌표: {rs.y}
+            </div>
           </div>
         )}
       </section>
       {!isLoading && !error && rs && (
-        <section>
-          <TakeYourUmbrella rs={rs} />
-        </section>
+        <section>{<TakeYourUmbrella rs={rs} />}</section>
       )}
     </div>
   );

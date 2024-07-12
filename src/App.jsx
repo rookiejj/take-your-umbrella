@@ -19,9 +19,6 @@ function App() {
         {/* <section>
           <TakeYourUmbrella />
         </section> */}
-        <section>
-          <textarea />
-        </section>
       </div>
     </>
   );

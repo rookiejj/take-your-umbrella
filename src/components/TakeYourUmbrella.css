@@ -1,0 +1,10 @@
+.TakeYourUmbrella .grouped_and_first_data {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.TakeYourUmbrella .probability {
+  font-size: 26px;
+  font-weight: bold;
+}
