@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { getStringedDate } from "../util/get-stringed-date";
 import { getCodeCategoryName } from "../util/code_category_name";
 import { getStringedTime } from "../util/get-stringed-time";
-import { calculatePrecipitationProbability } from "../util/calculate_precipitation_probability";
+import { getCalculateProbability } from "../util/calculate_probability";
+import { getSkyStatusName } from "../util/sky_status_name";
 
 const TakeYourUmbrella = ({ rs }) => {
   const [data, setData] = useState(null);
@@ -73,7 +74,7 @@ const TakeYourUmbrella = ({ rs }) => {
   if (loading) return <div>로딩중...</div>;
   if (error) return <div>에러: {error}</div>;
 
-  const value = data.response.body.items.item.map((item) => {
+  const conversionedData = data.response.body.items.item.map((item) => {
     const categoryName = getCodeCategoryName(item.category);
 
     return {
@@ -87,7 +88,7 @@ const TakeYourUmbrella = ({ rs }) => {
   });
 
   const groupedAndFirstData = Object.values(
-    value.reduce((acc, item) => {
+    conversionedData.reduce((acc, item) => {
       if (!acc[item.category]) {
         acc[item.category] = item;
       }
@@ -106,37 +107,38 @@ const TakeYourUmbrella = ({ rs }) => {
     vvv: 0,
     vec: 0,
     wsd: 0,
+    time: 0,
   };
 
   const rawDate = groupedAndFirstData.map((item) => {
     switch (item.category.toLowerCase()) {
       case "lgt":
-        weatherData.lgt = item.value;
+        weatherData.lgt = Number(item.value);
       case "pty":
-        weatherData.pty = item.value;
+        weatherData.pty = Number(item.value);
       case "rn1":
-        weatherData.rn1 = item.value;
+        weatherData.rn1 =
+          item.value === "강수없음" ? "강수없음" : Number(item.value);
       case "sky":
-        weatherData.sky = item.value;
+        weatherData.sky = Number(item.value);
       case "t1h":
-        weatherData.t1h = item.value;
+        weatherData.t1h = Number(item.value);
       case "reh":
-        weatherData.reh = item.value;
+        weatherData.reh = Number(item.value);
       case "uuu":
-        weatherData.uuu = item.value;
+        weatherData.uuu = Number(item.value);
       case "vvv":
-        weatherData.vvv = item.value;
+        weatherData.vvv = Number(item.value);
       case "vec":
-        weatherData.vec = item.value;
+        weatherData.vec = Number(item.value);
       case "wsd":
-        weatherData.wsd = item.value;
+        weatherData.wsd = Number(item.value);
       default:
         break;
     }
   });
 
-  const precipitationProbability =
-    calculatePrecipitationProbability(weatherData);
+  const precipitationProbability = getCalculateProbability(weatherData);
 
   return (
     <div className="TakeYourUmbrella">
@@ -148,7 +150,11 @@ const TakeYourUmbrella = ({ rs }) => {
         return (
           <div className="grouped_and_first_data">
             <div>{`${item.categoryName} : `}</div>
-            <div>{`${item.value}`}</div>
+            <div>
+              {item.category == "SKY"
+                ? `${getSkyStatusName(Number(item.value))}`
+                : `${item.value}`}
+            </div>
           </div>
         );
       })}

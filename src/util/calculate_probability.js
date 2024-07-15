@@ -13,7 +13,7 @@
  * @param {number} weatherData.wsd - 풍속 (m/s)
  * @returns {number} 강수 확률 (0에서 1 사이의 값)
  */
-export function calculatePrecipitationProbability(weatherData) {
+export function getCalculateProbability(weatherData) {
   let probability = 0;
 
   // 강수형태가 0이 아니면 강수 확률 높임
@@ -66,5 +66,5 @@ const weatherData = {
   wsd: 1,
 };
 
-const precipitationProbability = calculatePrecipitationProbability(weatherData);
+const precipitationProbability = getCalculateProbability(weatherData);
 console.log(`강수 확률: ${(precipitationProbability * 100).toFixed(2)}%`);
