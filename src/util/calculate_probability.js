@@ -18,7 +18,10 @@ export function getCalculateProbability(weatherData) {
 
   // 강수형태가 0이 아니면 강수 확률 높임
   if (weatherData.pty !== 0) {
-    probability += 0.5;
+    // probability += 0.5;
+    probability += 1.0;
+    // 확률이 1을 넘지 않도록 조정
+    return Math.min(probability, 1);
   }
 
   // 1시간 강수량이 있으면 강수 확률 높임

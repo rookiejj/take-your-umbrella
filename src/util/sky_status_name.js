@@ -1,6 +1,4 @@
 export function getSkyStatusName(sky) {
-  console.log(typeof sky);
-
   switch (sky) {
     case 1:
       return "맑음";

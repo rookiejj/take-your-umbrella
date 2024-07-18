@@ -78,6 +78,7 @@ const TakeYourUmbrella = ({ rs }) => {
     const categoryName = getCodeCategoryName(item.category);
 
     return {
+      ...item,
       categoryName: `${categoryName} (${item.category})`,
       category: `${item.category}`,
       baseDate: item.baseDate,
@@ -133,6 +134,7 @@ const TakeYourUmbrella = ({ rs }) => {
         weatherData.vec = Number(item.value);
       case "wsd":
         weatherData.wsd = Number(item.value);
+        weatherData.time = item.fcstTime;
       default:
         break;
     }
@@ -146,6 +148,9 @@ const TakeYourUmbrella = ({ rs }) => {
         precipitationProbability * 100
       ).toFixed(2)}%`}</div>
 
+      {/* <div style={{ backgroundColor: "blue", height: "100px" }}>
+        {conversionedData.value}
+      </div> */}
       {groupedAndFirstData.map((item) => {
         return (
           <div className="grouped_and_first_data">
