@@ -6,6 +6,7 @@ import { getCodeCategoryName } from "../util/code_category_name";
 import { getStringedTime } from "../util/get-stringed-time";
 import { getCalculateProbability } from "../util/calculate_probability";
 import { getSkyStatusName } from "../util/sky_status_name";
+import { getRainTypeName } from "../util/rain_type_name";
 
 const TakeYourUmbrella = ({ rs }) => {
   const [data, setData] = useState(null);
@@ -156,7 +157,9 @@ const TakeYourUmbrella = ({ rs }) => {
           <div className="grouped_and_first_data">
             <div>{`${item.categoryName} : `}</div>
             <div>
-              {item.category == "SKY"
+              {item.category == "PTY"
+                ? `${getRainTypeName(Number(item.value))}`
+                : item.category == "SKY"
                 ? `${getSkyStatusName(Number(item.value))}`
                 : `${item.value}`}
             </div>
