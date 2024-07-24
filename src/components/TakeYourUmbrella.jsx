@@ -145,7 +145,7 @@ const TakeYourUmbrella = ({ rs }) => {
 
   return (
     <div className="take-your-umbrella">
-      <h2 className="title">오늘의 날씨</h2>
+      <h2 className="title">현재 날씨</h2>
 
       <div className="probability-card">
         <div className="icon">☂️</div>
