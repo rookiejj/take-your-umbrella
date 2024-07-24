@@ -72,8 +72,8 @@ const TakeYourUmbrella = ({ rs }) => {
       });
   }, []);
 
-  if (loading) return <div>로딩중...</div>;
-  if (error) return <div>에러: {error}</div>;
+  if (loading) return <div className="loading">로딩중...</div>;
+  if (error) return <div className="error">에러: {error}</div>;
 
   const conversionedData = data.response.body.items.item.map((item) => {
     const categoryName = getCodeCategoryName(item.category);
@@ -144,14 +144,42 @@ const TakeYourUmbrella = ({ rs }) => {
   const precipitationProbability = getCalculateProbability(weatherData);
 
   return (
+    <div className="take-your-umbrella">
+      <h2 className="title">오늘의 날씨</h2>
+
+      <div className="probability-card">
+        <div className="icon">☂️</div>
+        <div className="info">
+          <span className="label">강수 확률</span>
+          <span className="value">
+            {(precipitationProbability * 100).toFixed(0)}%
+          </span>
+        </div>
+      </div>
+
+      <div className="weather-grid">
+        <WeatherCard
+          icon="☀️"
+          title="하늘 상태"
+          value={getSkyStatusName(weatherData.sky)}
+        />
+        <WeatherCard
+          icon="🌧️"
+          title="강수 형태"
+          value={getRainTypeName(weatherData.pty)}
+        />
+        <WeatherCard icon="🌡️" title="기온" value={`${weatherData.t1h}°C`} />
+        <WeatherCard icon="💨" title="풍속" value={`${weatherData.wsd} m/s`} />
+      </div>
+    </div>
+  );
+
+  return (
     <div className="TakeYourUmbrella">
       <div className="probability">{`강수 확률: ${(
         precipitationProbability * 100
       ).toFixed(2)}%`}</div>
 
-      {/* <div style={{ backgroundColor: "blue", height: "100px" }}>
-        {conversionedData.value}
-      </div> */}
       {groupedAndFirstData.map((item) => {
         return (
           <div className="grouped_and_first_data">
@@ -166,10 +194,18 @@ const TakeYourUmbrella = ({ rs }) => {
           </div>
         );
       })}
-      {/* <div>{JSON.stringify(groupedAndFirstData)}</div> */}
-      {/* <div>{JSON.stringify(data, null, 2)}</div> */}
     </div>
   );
 };
+
+const WeatherCard = ({ icon, title, value }) => (
+  <div className="weather-card">
+    <div className="icon">{icon}</div>
+    <div className="info">
+      <span className="label">{title}</span>
+      <span className="value">{value}</span>
+    </div>
+  </div>
+);
 
 export default TakeYourUmbrella;
